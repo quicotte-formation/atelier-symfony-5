@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Choisissez une année pour voir les produits correspondants</h1>
+    {% for donnee in lesDonnees %}
+        <p>
+            <a href="{{ path('lister-produits-par-annee', {annee: donnee.anneeSortie}) }}">{{ donnee.anneeSortie }} : {{ donnee.nb_prod }} produit(s)</a>
+        </p>
+    {% endfor %}
+{% endblock %}

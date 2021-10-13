@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Produit;
 use App\Repository\CategorieRepository;
+use App\Repository\ProduitRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,6 +12,32 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class FrontendController extends AbstractController
 {
+    /**
+     * @Route("/lister-produits-par-annee/{annee}", name="lister-produits-par-annee")
+     */
+    public function listerProduitsParAnnee($annee, ProduitRepository $produitRepository){
+
+        $produits = $produitRepository->findBy(['anneeSortie'=>$annee], ['titre'=>'ASC']);
+
+        return $this->render("frontend/lister-produits.html.twig",
+            ['produitsTrouves'=>$produits]);
+    }
+
+    /**
+     * @Route("/lister-annees", name="lister-annees")
+     */
+    public function listerAnnees(EntityManagerInterface $entityManager){
+
+        $dql = "SELECT  p.anneeSortie, COUNT(p) nb_prod 
+                FROM    App:Produit p
+                GROUP BY p.anneeSortie 
+                ORDER BY p.anneeSortie";
+        $donnees = $entityManager->createQuery($dql)->getResult();
+
+        return $this->render("frontend/lister-annees.html.twig",
+            ['lesDonnees'=>$donnees]);
+    }
+
     /**
      * @Route("/lister-produits/{idCat}", name="lister-produits")
      */

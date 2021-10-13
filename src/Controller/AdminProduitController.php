@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Produit;
 use App\Form\ProduitType;
 use App\Repository\ProduitRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,10 +19,15 @@ class AdminProduitController extends AbstractController
     /**
      * @Route("/", name="admin_produit_index", methods={"GET"})
      */
-    public function index(ProduitRepository $produitRepository): Response
+    public function index(ProduitRepository $produitRepository, EntityManagerInterface $entityManager): Response
     {
+        $query = $entityManager->createQuery("SELECT p FROM App:Produit p ORDER BY p.titre");
+        $query->setFirstResult(0);
+        $query->setMaxResults(5);
+
+
         return $this->render('admin_produit/index.html.twig', [
-            'produits' => $produitRepository->findAll(),
+            'produits' => $query->getResult(),
         ]);
     }
 
