@@ -10,19 +10,23 @@
             <tr>
                 <th>Id</th>
                 <th>DateHeureCommande</th>
+                <th>Client</th>
                 <th>Etat</th>
+                <th>Nb. produits</th>
                 <th>actions</th>
             </tr>
         </thead>
         <tbody>
-        {% for commande in commandes %}
+        {% for donnee in donnees %}
             <tr>
-                <td>{{ commande.id }}</td>
-                <td>{{ commande.dateHeureCommande ? commande.dateHeureCommande|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ commande.etat }}</td>
+                <td>{{ donnee.com.id }}</td>
+                <td>{{ donnee.com.dateHeureCommande ? donnee.com.dateHeureCommande|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ donnee.com.client }}</td>
+                <td>{{ donnee.com.etat }}</td>
+                <td>{{ donnee.nb_prod }}</td>
                 <td>
-                    <a href="{{ path('admin_commande_show', {'id': commande.id}) }}">show</a>
-                    <a href="{{ path('admin_commande_edit', {'id': commande.id}) }}">edit</a>
+                    <a href="{{ path('admin_commande_show', {'id': donnee.com.id}) }}">show</a>
+                    <a href="{{ path('admin_commande_edit', {'id': donnee.com.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}

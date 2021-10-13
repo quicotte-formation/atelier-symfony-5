@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Commande;
 use App\Form\CommandeType;
 use App\Repository\CommandeRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,10 +19,20 @@ class AdminCommandeController extends AbstractController
     /**
      * @Route("/", name="admin_commande_index", methods={"GET"})
      */
-    public function index(CommandeRepository $commandeRepository): Response
+    public function index(CommandeRepository $commandeRepository, EntityManagerInterface $entityManager): Response
     {
+        $dql = "SELECT  c com, COUNT(p) nb_prod
+                FROM    App:Commande c
+                        JOIN c.produits p
+                GROUP BY c.id
+                ORDER BY c.dateHeureCommande DESC";
+        $query = $entityManager->createQuery( $dql );
+
+        $data = $query->getResult();
+        dump($data);
+
         return $this->render('admin_commande/index.html.twig', [
-            'commandes' => $commandeRepository->findAll(),
+            'donnees' => $data,
         ]);
     }
 
