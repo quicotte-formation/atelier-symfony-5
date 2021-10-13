@@ -37,8 +37,8 @@ class AdminProduitController extends AbstractController
     public function new(Request $request): Response
     {
         $produit = new Produit();
-        $form = $this->createForm(ProduitType::class, $produit);
-        $form->handleRequest($request);
+        $form = $this->createForm(ProduitType::class, $produit);// Form binding ascendant ( data -> form )
+        $form->handleRequest($request);// Form binding descendant ( du form -> data )
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();

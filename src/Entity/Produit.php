@@ -6,6 +6,7 @@ use App\Repository\ProduitRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ProduitRepository::class)
@@ -21,6 +22,7 @@ class Produit
 
     /**
      * @ORM\Column(type="string", length=32,unique=true)
+     * @Assert\Length(min=3, max=15, minMessage="Mini 3", maxMessage="Maxi 15")
      */
     private $titre;
 
@@ -37,6 +39,7 @@ class Produit
     /**
      * @ORM\ManyToOne(targetEntity=Categorie::class, inversedBy="produits")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank(message="Champ requis!")
      */
     private $categorie;
 
