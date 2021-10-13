@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Produit;
+use App\Repository\CategorieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -10,6 +11,37 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class FrontendController extends AbstractController
 {
+    /**
+     * @Route("/lister-produits/{idCat}", name="lister-produits")
+     */
+    public function listerProduits($idCat, EntityManagerInterface $entityManager){
+
+        $dql = "SELECT  p 
+                FROM    App:Produit p
+                        JOIN p.categorie c
+                WHERE   c.id=:IDCAT
+                ORDER BY p.titre
+                ";
+        $query = $entityManager->createQuery($dql);
+        $query->setParameter('IDCAT', $idCat);
+        $produits = $query->getResult();
+
+        return $this->render("frontend/lister-produits.html.twig",
+            ['produitsTrouves'=>$produits]);
+    }
+
+    /**
+     * @Route("/lister-categories", name="lister-categories")
+     */
+    public function listerCategories(CategorieRepository $categorieRepository){
+
+        $categories = $categorieRepository->findAll();
+        dump($categories);
+
+        return $this->render("frontend/lister-categories.html.twig",
+            ['lesCategories'=>$categories]);
+    }
+
     /**
      * @Route ("/ajouter-produit", name="ajouter-produit")
      */

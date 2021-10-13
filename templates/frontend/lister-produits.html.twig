@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Liste des produits de la catégorie : </h1>
+    <table class="table">
+        <thead>
+            <th>Titre</th>
+            <th>Année sortie</th>
+            <th>Prix</th>
+        </thead>
+        <tbody>
+        {% for prod in produitsTrouves %}
+            <tr>
+                <td>{{ prod.titre }}</td>
+                <td>{{ prod.anneeSortie }}</td>
+                <td>{{ prod.prix }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
